@@ -1,0 +1,140 @@
+name: Build & Test
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*.*.*"]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install build and dev dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install .[dev]
+
+      - name: Write config.toml with session
+        run: |
+          mkdir -p ~/.config/pysleigh
+          cat <<EOF > ~/.config/pysleigh/config.toml
+          session = "${{ secrets.AOC_SESSION_SECRET }}"
+
+          [inputs]
+          path = "input/"
+          format = "year_{year}/input_{year}_day_{day:02d}.txt"
+
+          [articles]
+          path = "articles/"
+          format = "year_{year}/article_{year}_day_{day:02d}.md"
+
+          [solutions]
+          path = "solutions/python/"
+          format = "year_{year}/solution_{year}_day_{day:02d}.py"
+
+          [tests]
+          path = "tests/python/"
+          format = "year_{year}/test_{year}_day_{day:02d}.py"
+
+          [answers]
+          path = "answers/"
+          format = "year_{year}/answer_{year}_day{day:02d}.txt"
+
+          [template]
+          solution_path = "~/.config/pysleigh/solution_template.py"
+          test_path = "~/.config/pysleigh/test_template.py"
+          EOF
+
+      - name: Write default templates
+        run: |
+          mkdir -p ~/.config/pysleigh
+
+          cat <<'EOF' > ~/.config/pysleigh/solution_template.py
+          from typing import List
+
+          class Solution:
+              def __init__(self, input_path: str = "input/year_{year}/input_{year}_day_{day:02d}.txt") -> None:
+                  with open(input_path, encoding="utf-8") as f:
+                      self.raw_input: str = f.read()
+                  self.data: List[str] = self.parse_input()
+
+              def parse_input(self) -> List[str]:
+                  return self.raw_input.strip().splitlines()
+
+              def part1(self) -> int | str:
+                  return NotImplemented
+
+              def part2(self) -> int | str:
+                  return NotImplemented
+
+          def main() -> None:
+              input_path = "input/year_{year}/input_{year}_day_{day:02d}.txt"
+              solution = Solution(input_path)
+              print("Part 1:", solution.part1())
+              print("Part 2:", solution.part2())
+
+          if __name__ == "__main__":
+              main()
+          EOF
+
+          cat <<'EOF' > ~/.config/pysleigh/test_template.py
+          from year_{year}.solution_{year}_day_{day:02d} import Solution
+
+          class TestSolution_{year}_{day:02d}:
+              def setup_method(self):
+                  self.input_path = "input/year_{year}/input_{year}_day_{day:02d}.txt"
+                  self.solution = Solution(self.input_path)
+
+              def test_parse_input(self):
+                  assert isinstance(self.solution.data, list)
+                  assert all(isinstance(line, str) for line in self.solution.data)
+
+              def test_part1(self):
+                  result = self.solution.part1()
+                  assert result is not None
+
+              def test_part2(self):
+                  result = self.solution.part2()
+                  assert result is not None
+          EOF
+
+      - name: Run tests with coverage
+        run: pytest --cov=src/pysleigh --cov-report=term-missing
+
+  publish:
+    name: Publish to PyPI
+    needs: test
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install build tools
+        run: pip install build twine
+
+      - name: Build distribution
+        run: python -m build
+
+      - name: Publish to PyPI
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        run: twine upload dist/*

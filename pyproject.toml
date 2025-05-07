@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pysleigh"
+version = "0.1.0"
+description = "A CLI tool for Advent of Code automation"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "David Bateman", email = "148539956+Dheebz@users.noreply.github.com" }]
+requires-python = ">=3.8"
+dependencies = [
+    "beautifulsoup4",
+    "markdownify",
+    "requests",
+    "typer[all]",
+    "toml",
+    "pytest",
+]
+
+[project.optional-dependencies]
+dev = ["black", "ruff", "mypy", "pytest-cov"]
+
+[project.scripts]
+pysleigh = "pysleigh.cli.main:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+
+markers = [
+    "unit: mark a test as a unit test",
+    "integration: mark a test as an integration test",
+    "smoke: mark a test for CLI or setup flows",
+    "slow: mark a test as slow-running",
+]

@@ -43,12 +43,6 @@ class AoCSolutionGenerator:
             return self.template_path.read_text()
 
         self.logger.warning("No custom solution template found. Using default.")
-
-    def load_template(self) -> str:
-        if self.template_path and self.template_path.exists():
-            return self.template_path.read_text()
-
-        self.logger.warning("No custom solution template found. Using default.")
         return (
             "from typing import List\n\n"
             "class Solution:\n"

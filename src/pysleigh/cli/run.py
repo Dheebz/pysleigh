@@ -48,9 +48,6 @@ def run_solution(
         typer.secho(f"[Error] {e}", fg=typer.colors.RED)
 
 
-
-
-
 @run_app.command("test")
 def run_test(
     year: int = typer.Option(None, help="Year of the puzzle"),

@@ -53,7 +53,6 @@ class AoCAnswers:
             f"Fetched HTML for {self.aoc_date.year} Day {self.aoc_date.day:02d}"
         )
         html = response.text
-        soup = BeautifulSoup(html, "html.parser")
 
         answers = re.findall(
             r"<p>Your puzzle answer was <code>(.*?)</code>\.</p>", html

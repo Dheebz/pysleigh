@@ -12,7 +12,6 @@ def benchmark_solution(
     day: int = typer.Option(None, help="Day of the puzzle"),
     runs: int = typer.Option(5, help="Number of times to run the benchmark."),
 ):
-
     aoc_date = AoCDate(year, day) if year and day else None
     benchmark = AoCBenchmark(aoc_date, runs=runs)
 

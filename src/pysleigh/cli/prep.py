@@ -3,6 +3,8 @@ from pysleigh.utilities.date import AoCDate
 from pysleigh.modules.article import AoCArticle
 from pysleigh.modules.input import AoCInput
 from pysleigh.modules.generate_solution import AoCSolutionGenerator
+from pysleigh.modules.answers import AoCAnswers
+from pysleigh.modules.generate_test import AoCTestGenerator
 
 prep_app = typer.Typer(
     help="Prep your workspace by fetching input, article, and generating solution."
@@ -43,10 +45,6 @@ def _prep_day(year: int, day: int, overwrite: bool):
         typer.secho(f"✅ Ready: {year}-Day{day:02d}", fg=typer.colors.GREEN)
     except Exception as e:
         typer.secho(f"[Error] Failed to prep Day {day:02d}: {e}", fg=typer.colors.RED)
-
-
-from pysleigh.modules.answers import AoCAnswers
-from pysleigh.modules.generate_test import AoCTestGenerator
 
 
 @prep_app.command("test")

@@ -3,13 +3,6 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 from pysleigh.utilities.logger import AoCLogger
 
-
-AOC_START_YEAR: int = 2015
-AOC_MAX_DAY: int = 25
-AOC_TIMEZONE = ZoneInfo("America/New_York")
-from zoneinfo import ZoneInfo
-
-
 AOC_START_YEAR = 2015
 AOC_MAX_DAY = 25
 AOC_TIMEZONE = ZoneInfo("America/New_York")

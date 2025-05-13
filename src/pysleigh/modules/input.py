@@ -74,7 +74,7 @@ class AoCInput:
         input_data = self.fetch_input()
         if input_data:
             with self.input_path.open("w") as file:
-                file.write(input_data.strip())
+                file.write(input_data)
             self.logger.info(f"Input written to {self.input_path}")
 
     def get_or_fetch(self) -> str:

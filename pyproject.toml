@@ -4,11 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pysleigh"
-version = "0.1.0"
+version = "0.1.1"
 description = "A CLI tool for Advent of Code automation"
 readme = "README.md"
 license = { text = "MIT" }
-authors = [{ name = "David Bateman", email = "148539956+Dheebz@users.noreply.github.com" }]
+authors = [
+    { name = "David Bateman", email = "148539956+Dheebz@users.noreply.github.com" },
+]
 requires-python = ">=3.8"
 dependencies = [
     "beautifulsoup4",

@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.8","3.9","3.10","3.11", "3.12", "3.13"]
+        python-version: ["3.10","3.11", "3.12", "3.13"]
 
     steps:
       - uses: actions/checkout@v4
@@ -97,7 +97,7 @@ jobs:
                   self.input_path = "input/year_{year}/input_{year}_day_{day:02d}.txt"
                   self.solution = Solution(self.input_path)
 
-              def test_parse_input(self):
+             def test_parse_input(self):
                   assert isinstance(self.solution.data, list)
                   assert all(isinstance(line, str) for line in self.solution.data)
 

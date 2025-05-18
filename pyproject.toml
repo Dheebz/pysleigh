@@ -93,3 +93,9 @@ tests_dir = ["tests/"]
 exclude = ["*/__init__.py"]
 
 
+[tool.commitizen]
+name = "cz_conventional_commits"
+tag_format = "$version"
+version_scheme = "pep440"
+version_provider = "pep621"
+update_changelog_on_bump = true

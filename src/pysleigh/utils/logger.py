@@ -149,7 +149,7 @@ class AoCLogger:
         logger: logging.Logger = logging.getLogger(name)
 
         if not logger.handlers:
-            handler = logging.StreamHandler(sys.stderr)
+            handler = logging.StreamHandler(sys.stderr)  # type: ignore[no-matching-overload]
 
             handler.setFormatter(self.formatter)
             handler.setLevel(self.level)

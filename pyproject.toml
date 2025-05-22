@@ -25,7 +25,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["ruff", "mypy", "pytest-cov"]
+dev = ["ruff", "mypy", "pytest-cov","mutmut", "commitizen", "cz-conventional-commits"]
 
 [project.scripts]
 pysleigh = "pysleigh.cli:main"
